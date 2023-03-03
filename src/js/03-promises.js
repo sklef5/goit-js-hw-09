@@ -32,11 +32,9 @@ function onClickSubmit(e) {
   const amount = Number(e.currentTarget.elements.amount.value);
   let tempDelay =delay;
 
-
-for (i =0; i<amount; i++){
+  for (let i =0; i<amount; i++){
     createPromise(i+1, tempDelay);
     tempDelay +=step
-    console.log(tempDelay)
 }
 }
 
