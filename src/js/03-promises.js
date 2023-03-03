@@ -20,7 +20,7 @@ function onClickSubmit(e) {
   const delay = Number(e.currentTarget.elements.delay.value);
   const step = Number(e.currentTarget.elements.step.value);
   const amount = Number(e.currentTarget.elements.amount.value);
-  let tempDelay =delay;
+  let tempDelay = delay;
 
   for (let i =0; i<amount; i++){
     createPromise(i+1, tempDelay)

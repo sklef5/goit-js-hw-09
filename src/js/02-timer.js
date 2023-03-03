@@ -33,7 +33,6 @@ const options = {
     minuteIncrement: 1,
     
     onClose(selectedDates) {
-        console.log(selectedDates)
         const timeDifferent = selectedDates[0]
         if((selectedDates[0] - Date.now())<0){
             Notiflix.Notify.warning("Please choose a date in the future")
@@ -44,16 +43,14 @@ const options = {
         refs.btnStart.addEventListener('click', ()=>{        
                 refs.btnStart.disabled = 'true';
                 setTimer = setInterval(()=>{
-                    console.log(timeDifferent)
                     const timeLeft = timeDifferent - Date.now();
-                    if (timeLeft >0){
-                        const timeConv = convertMs(timeLeft)
-                        const timer =  getTimer(timeConv)
-                    } else {
+                    if (timeLeft <= 0){
                         Notiflix.Notify.success("Time is up")
                         clearInterval(setTimer)
                         return;
-                    }
+                    };
+                // const timeConv = convertMs(timeLeft)
+                const timer =  getTimer(convertMs(timeLeft))                                
                 }, 1000);               
             }
         )
