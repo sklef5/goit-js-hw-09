@@ -4,8 +4,8 @@ const formData = document.querySelector('form')
 
 function createPromise(position, delay) {  
   return  new Promise((resolve, reject)=>{
-    setTimeout(()=>{
     const shouldResolve = Math.random() > 0.3;
+    setTimeout(()=>{
     if (shouldResolve) {
       resolve({position, delay})
     } else {
