@@ -8,7 +8,7 @@ const onStop = document.querySelector('button[data-stop]')
 
 
 onStop.addEventListener('click', ()=>{
-    onStart.removeAttribute('disabled', 'true')
+    onStart.disabled = 'false'
     clearInterval(color)
 })
 
@@ -16,9 +16,8 @@ const colorDody = ()=>{
     document.body.style.backgroundColor = getRandomHexColor()
 }
 
-function getColor (){
-    onStart.setAttribute('disabled', 'true')
+onStart.addEventListener('click', ()=>{
+    onStart.disabled = 'true'
  color =  setInterval(colorDody, 1000)
 }
-
-onStart.addEventListener('click', getColor)
+)

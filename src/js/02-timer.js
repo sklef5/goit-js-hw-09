@@ -2,29 +2,29 @@ import flatpickr from "flatpickr";
 import Notiflix from 'notiflix';
 import "flatpickr/dist/flatpickr.min.css";
 
-const styleDivWrap= document.querySelector('.timer')
-const styleDiv = document.querySelectorAll('.field')
+const refs ={
+    styleDivWrap:  document.querySelector('.timer'),
+    styleDiv: document.querySelectorAll('.field'),
+    setTime: document.querySelector("#datetime-picker"),
+    btnStart: document.querySelector("button[data-start]"),
+    formDay :document.querySelector("span[data-days]"),
+    formHour :document.querySelector("span[data-hours]"),
+    formMin :document.querySelector("span[data-minutes]"),
+    formSec :document.querySelector("span[data-seconds]"),
+}
 
-styleDivWrap.style.display = 'flex'
-styleDivWrap.style.gap = '30px'
+let  timeDifferent = 0;
+let setTimer = null;
+refs.btnStart.disabled = 'true';
 
-styleDiv.forEach((item)=>{
+refs.styleDivWrap.style.display = 'flex'
+refs.styleDivWrap.style.gap = '30px'
+
+refs.styleDiv.forEach((item)=>{
     item.style.display = 'flex'
     item.style.flexDirection = 'column'
     item.style.alignItems = 'center'
 })
-
-let  timeDifferent = 0;
-let setTimer = null;
-const refs ={
-     setTime: document.querySelector("#datetime-picker"),
-     btnStart: document.querySelector("button[data-start]"),
-     formDay :document.querySelector("span[data-days]"),
-     formHour :document.querySelector("span[data-hours]"),
-     formMin :document.querySelector("span[data-minutes]"),
-     formSec :document.querySelector("span[data-seconds]"),
-}
-refs.btnStart.setAttribute('disabled', 'true')
 
 const options = {
     enableTime: true,
@@ -42,6 +42,7 @@ const options = {
     },
     
   };
+  
 flatpickr(refs.setTime, options); 
 
 
@@ -74,22 +75,24 @@ function getTimer(time){
         refs.formMin.textContent  = addLeadingZero(minutes),
         refs.formSec.textContent  = addLeadingZero(seconds)
     }
-    const timer = {
-        start(){
-            setTimer = setInterval(()=>{
-                const timeLeft = timeDifferent - Date.now();
-                if (timeLeft >0){
-                    const timeConv = convertMs(timeLeft)
-                    const timer =  getTimer(timeConv)
-                } else {
-                    timer.stop()
-                }
-            }, 1000);
-        },
-        stop(){
-            Notiflix.Notify.success("Time is up")
-            clearInterval(setTimer)
-        }
+
+const timer = {
+    start(){
+        refs.btnStart.disabled = 'true';
+        setTimer = setInterval(()=>{
+            const timeLeft = timeDifferent - Date.now();
+            if (timeLeft >0){
+                const timeConv = convertMs(timeLeft)
+                const timer =  getTimer(timeConv)
+            } else {
+                timer.stop()
+            }
+        }, 1000);
+    },
+    stop(){
+        Notiflix.Notify.success("Time is up")
+        clearInterval(setTimer)
     }
+}
        
 refs.btnStart.addEventListener('click', timer.start)

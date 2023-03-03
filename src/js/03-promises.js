@@ -6,15 +6,16 @@ const refs ={
 
 
 function createPromise(position, delay) {
-  const shouldResolve = Math.random() > 0.3;
+  
   const promise = new Promise((resolve, reject)=>{
-    setInterval(()=>{
-  if (shouldResolve) {
-    resolve({position, delay})
-  } else {
-    reject({position, delay})
-  }
-}, delay)
+    setTimeout(()=>{
+    const shouldResolve = Math.random() > 0.3;
+    if (shouldResolve) {
+      resolve({position, delay})
+    } else {
+      reject({position, delay})
+    }
+  }, delay)
 })
 
 promise
@@ -25,6 +26,7 @@ promise
     Notiflix.Notify.warning(`❌ Rejected promise ${position} in ${delay}ms`);
   });
 }
+
 function onClickSubmit(e) {
   e.preventDefault();
   const delay = Number(e.currentTarget.elements.delay.value);
