@@ -1,13 +1,9 @@
 import Notiflix from 'notiflix';
 
-const refs ={
-  formData: document.querySelector('form'),
-}
+const formData = document.querySelector('form')
 
-
-function createPromise(position, delay) {
-  
-  const promise = new Promise((resolve, reject)=>{
+function createPromise(position, delay) {  
+  return promise = new Promise((resolve, reject)=>{
     setTimeout(()=>{
     const shouldResolve = Math.random() > 0.3;
     if (shouldResolve) {
@@ -17,14 +13,6 @@ function createPromise(position, delay) {
     }
   }, delay)
 })
-
-promise
-  .then(({ position, delay }) => {
-    Notiflix.Notify.success(`✅ Fulfilled promise ${position} in ${delay}ms`);
-  })
-  .catch(({ position, delay }) => {
-    Notiflix.Notify.warning(`❌ Rejected promise ${position} in ${delay}ms`);
-  });
 }
 
 function onClickSubmit(e) {
@@ -35,9 +23,15 @@ function onClickSubmit(e) {
   let tempDelay =delay;
 
   for (let i =0; i<amount; i++){
-    createPromise(i+1, tempDelay);
+    createPromise(i+1, tempDelay)
+    .then(({ position, delay }) => {
+      Notiflix.Notify.success(`✅ Fulfilled promise ${position} in ${delay}ms`);
+    })
+    .catch(({ position, delay }) => {
+      Notiflix.Notify.warning(`❌ Rejected promise ${position} in ${delay}ms`);
+    });
     tempDelay +=step
 }
 }
 
-refs.formData.addEventListener('submit', onClickSubmit)
+formData.addEventListener('submit', onClickSubmit)
