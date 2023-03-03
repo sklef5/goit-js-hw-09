@@ -1,7 +1,7 @@
 import flatpickr from "flatpickr";
 import Notiflix from 'notiflix';
 import "flatpickr/dist/flatpickr.min.css";
-
+// ---VARS ---//
 const refs ={
     styleDivWrap:  document.querySelector('.timer'),
     styleDiv: document.querySelectorAll('.field'),
@@ -13,7 +13,7 @@ const refs ={
     formSec :document.querySelector("span[data-seconds]"),
 }
 
-let  timeDifferent = 0;
+// ---STYLE ---//
 let setTimer = null;
 refs.btnStart.disabled = 'true';
 
@@ -25,7 +25,7 @@ refs.styleDiv.forEach((item)=>{
     item.style.flexDirection = 'column'
     item.style.alignItems = 'center'
 })
-
+// ---FUNC ---//
 const options = {
     enableTime: true,
     time_24hr: true,
@@ -33,19 +33,36 @@ const options = {
     minuteIncrement: 1,
     
     onClose(selectedDates) {
-        timeDifferent = selectedDates[0]
+        console.log(selectedDates)
+        const timeDifferent = selectedDates[0]
         if((selectedDates[0] - Date.now())<0){
             Notiflix.Notify.warning("Please choose a date in the future")
         }else{
             refs.btnStart.removeAttribute('disabled')
         }
-    },
-    
-  };
+        
+        refs.btnStart.addEventListener('click', ()=>{        
+                refs.btnStart.disabled = 'true';
+                setTimer = setInterval(()=>{
+                    console.log(timeDifferent)
+                    const timeLeft = timeDifferent - Date.now();
+                    if (timeLeft >0){
+                        const timeConv = convertMs(timeLeft)
+                        const timer =  getTimer(timeConv)
+                    } else {
+                        Notiflix.Notify.success("Time is up")
+                        clearInterval(setTimer)
+                        return;
+                    }
+                }, 1000);               
+            }
+        )
+        }            
+    };  
   
 flatpickr(refs.setTime, options); 
 
-
+// ---CONVERTERS ---//
 function convertMs(ms) {
     // Number of milliseconds per unit of time
     const second = 1000;
@@ -75,24 +92,3 @@ function getTimer(time){
         refs.formMin.textContent  = addLeadingZero(minutes),
         refs.formSec.textContent  = addLeadingZero(seconds)
     }
-
-const timer = {
-    start(){
-        refs.btnStart.disabled = 'true';
-        setTimer = setInterval(()=>{
-            const timeLeft = timeDifferent - Date.now();
-            if (timeLeft >0){
-                const timeConv = convertMs(timeLeft)
-                const timer =  getTimer(timeConv)
-            } else {
-                timer.stop()
-            }
-        }, 1000);
-    },
-    stop(){
-        Notiflix.Notify.success("Time is up")
-        clearInterval(setTimer)
-    }
-}
-       
-refs.btnStart.addEventListener('click', timer.start)

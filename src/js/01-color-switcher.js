@@ -6,18 +6,19 @@ let color = null;
 const onStart = document.querySelector('button[data-start]')
 const onStop = document.querySelector('button[data-stop]')
 
-
-onStop.addEventListener('click', ()=>{
-    onStart.disabled = 'false'
-    clearInterval(color)
-})
-
 const colorDody = ()=>{
     document.body.style.backgroundColor = getRandomHexColor()
 }
-
+// ---LISRTENERS ---//
 onStart.addEventListener('click', ()=>{
-    onStart.disabled = 'true'
- color =  setInterval(colorDody, 1000)
+    onStart.disabled = true
+    color =  setInterval(colorDody, 1000)
+
+    onStop.addEventListener('click', ()=>{
+        onStart.disabled = false
+        clearInterval(color)
+        return;
+    })
 }
 )
+
