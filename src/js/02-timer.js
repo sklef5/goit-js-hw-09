@@ -12,10 +12,12 @@ const refs ={
     formMin :document.querySelector("span[data-minutes]"),
     formSec :document.querySelector("span[data-seconds]"),
 }
+let setTimer = null;
+let timeLeft =0;
 
 // ---STYLE ---//
-let setTimer = null;
-refs.btnStart.disabled = 'true';
+
+refs.btnStart.disabled = true;
 
 refs.styleDivWrap.style.display = 'flex'
 refs.styleDivWrap.style.gap = '30px'
@@ -31,32 +33,35 @@ const options = {
     time_24hr: true,
     defaultDate: new Date(),
     minuteIncrement: 1,
-    
+
     onClose(selectedDates) {
-        const timeDifferent = selectedDates[0]
+        if (setTimer !==null){
+            return;
+        }
         if((selectedDates[0] - Date.now())<0){
             Notiflix.Notify.warning("Please choose a date in the future")
-        }else{
-            refs.btnStart.removeAttribute('disabled')
+            return;
         }
+        refs.btnStart.disabled = false;
         
-        refs.btnStart.addEventListener('click', ()=>{        
-                refs.btnStart.disabled = 'true';
-                setTimer = setInterval(()=>{
-                    const timeLeft = timeDifferent - Date.now();
-                    if (timeLeft <= 0){
-                        Notiflix.Notify.success("Time is up")
-                        clearInterval(setTimer)
-                        return;
-                    };
-                // const timeConv = convertMs(timeLeft)
-                const timer =  getTimer(convertMs(timeLeft))                                
-                }, 1000);               
+        refs.btnStart.addEventListener('click', ()=>{                      
+            refs.btnStart.disabled = true;
+            setTimer = setInterval(()=>{
+                timeLeft = selectedDates[0] - Date.now();
+
+                if (timeLeft > 1){
+                    const timer =  getTimer(convertMs(timeLeft))   
+                    return;
+                };                   
+                Notiflix.Notify.success("Time is up");
+
+                clearInterval(setTimer)                      
+            }, 1000); 
             }
         )
         }            
     };  
-  
+refs.btnStart.disabled = true;  
 flatpickr(refs.setTime, options); 
 
 // ---CONVERTERS ---//
